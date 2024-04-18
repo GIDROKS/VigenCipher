@@ -5,18 +5,15 @@
 #include <stdlib.h>
 
 
-int isDelimiter(char c)
-{
-    return c == ' ' || c == '\n' || c == '\t' || c == '\0';
-}
+#define LETTERS_COUNT 4
 
-int isSpaceChar(char c) {
-    return (c == ' ' || c == '\n' || c == '\t' || c == '\v');
-}
 
-int isNumericChar(char c)
+char toUpperCase(char ch)
 {
-    return (c >= '0' && c <= '9');
+    if (ch >= 'a' && ch <= 'z')
+        return ch - 'a' + 'A';
+
+    return ch;
 }
 
 char* allocateString(int length)
@@ -61,43 +58,41 @@ void copyString(char* dest, const char* src, int n)
     }
 }
 
-void removeSubstring(char* str, int start, int length)
-{
-    int i = start;
-    int oldLength = stringLength(str);
-
-    while (str[i + length] != '\0')
-    {
-        str[i] = str[i + length];
-        i++;
-    }
-    str[i] = '\0';
-
-    char* newStr = reallocateMemory(str, oldLength, i + 1);
-    if (newStr == NULL && i > 0)
-        printf("Memory reallocation failed\n");
-    else
-        str = newStr;
-}
-
-int convertStringToInt(const char* str)
-{
-    int result = 0;
-    int sign = 1;   // 1 для положительного, -1 для отрицательного
-
-    while (isSpaceChar(*str))
-        str++;
-
-    if (*str == '-' || *str == '+') {
-        sign = (*str == '-') ? -1 : 1;
-        str++;
+char* readLine() {
+    char* buffer = malloc(LETTERS_COUNT);
+    if (buffer == NULL) {
+        printf("Failed to allocate memory\n");
+        return NULL;
     }
 
-    while (isNumericChar(*str)) {
-        result = result * 10 + (*str - '0');
-        str++;
+    int capacity = LETTERS_COUNT;
+    int length = 0;
+    char ch = getchar();
+
+    while (ch != '\n' && ch != EOF) {
+        buffer[length++] = ch;
+
+        if (length == capacity)
+        {
+            capacity *= 2;
+            char* temp = reallocateMemory(buffer, length, capacity);
+            if (temp == NULL) {
+                printf("Failed to reallocate memory\n");
+                free(buffer);
+                return NULL;
+            }
+            buffer = temp;
+        }
+
+        ch = getchar();
     }
 
-    return sign * result;
+    buffer[length] = '\0';
+
+    char* temp = realloc(buffer, capacity, length + 1);
+    if (temp == NULL)
+        return buffer;
+
+    return temp;
 }
 
