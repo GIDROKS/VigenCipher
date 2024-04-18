@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 
-#define LETTERS_COUNT 4
+#define START_BUFFER_SIZE 4
 
 
 char toUpperCase(char ch)
@@ -58,38 +58,49 @@ void copyString(char* dest, const char* src, int n)
     }
 }
 
-char* readLine() {
-    char* buffer = malloc(LETTERS_COUNT);
-    if (buffer == NULL) {
+static char* manageBuffer(char* buffer, int currentLength, int* capacity){
+    if (currentLength == *capacity)
+    {
+        *capacity *= 2;
+        char* temp = reallocateMemory(buffer, currentLength, *capacity);
+        if (temp == NULL)
+        {
+            printf("Failed to reallocate memory\n");
+            free(buffer);
+            return NULL;
+        }
+        buffer = temp;
+    }
+
+    return buffer;
+}
+
+char* readLine()
+{
+    char* buffer = malloc(START_BUFFER_SIZE);
+    if (buffer == NULL)
+    {
         printf("Failed to allocate memory\n");
         return NULL;
     }
 
-    int capacity = LETTERS_COUNT;
+    int capacity = START_BUFFER_SIZE;
     int length = 0;
-    char ch = getchar();
+    char ch = getc(stdin);
 
-    while (ch != '\n' && ch != EOF) {
+    while (ch != '\n' && ch != EOF)
+    {
         buffer[length++] = ch;
+        buffer = manageBuffer(buffer, length, &capacity);
+        if (buffer == NULL) 
+            return NULL;
 
-        if (length == capacity)
-        {
-            capacity *= 2;
-            char* temp = reallocateMemory(buffer, length, capacity);
-            if (temp == NULL) {
-                printf("Failed to reallocate memory\n");
-                free(buffer);
-                return NULL;
-            }
-            buffer = temp;
-        }
-
-        ch = getchar();
+        ch = getc(stdin);
     }
 
     buffer[length] = '\0';
 
-    char* temp = realloc(buffer, capacity, length + 1);
+    char* temp = reallocateMemory(buffer, capacity, length + 1);
     if (temp == NULL)
         return buffer;
 
