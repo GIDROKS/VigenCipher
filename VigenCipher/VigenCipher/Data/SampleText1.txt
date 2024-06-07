@@ -1,0 +1,7 @@
+Object-oriented programming (OOP) is a programming methodology 
+based on the concept of objects, which can contain data and methods.
+The main principles of OOP include encapsulation, inheritance, and polymorphism.
+Encapsulation helps to hide the internal implementation of an object
+and provides only the necessary interfaces for interacting with it.
+
+Encapsulation

@@ -16,7 +16,16 @@
     <Filter Include="Исходные файлы\memory_manager">
       <UniqueIdentifier>{34eade12-83d3-4f91-b13a-411bb38149af}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Исходные файлы\my_string">
+    <Filter Include="Исходные файлы\vigenere_cipher">
+      <UniqueIdentifier>{bde366ba-99e7-470c-a4df-9b7cb10b47d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\text_file_manager">
+      <UniqueIdentifier>{987c2e95-ea69-4077-a983-792956d56aa3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\common">
+      <UniqueIdentifier>{2541a8c0-3a17-4965-b961-96966c140f7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\string_manager">
       <UniqueIdentifier>{366f023d-7c8f-4218-87b8-56fdb99e351a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -27,16 +36,34 @@
     <ClCompile Include="memory_manager.c">
       <Filter>Исходные файлы\memory_manager</Filter>
     </ClCompile>
-    <ClCompile Include="my_string.c">
-      <Filter>Исходные файлы\my_string</Filter>
+    <ClCompile Include="string_manager.c">
+      <Filter>Исходные файлы\string_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="vigenere_cipher.c">
+      <Filter>Исходные файлы\vigenere_cipher</Filter>
+    </ClCompile>
+    <ClCompile Include="common.c">
+      <Filter>Исходные файлы\common</Filter>
+    </ClCompile>
+    <ClCompile Include="text_file_manager.c">
+      <Filter>Исходные файлы\text_file_manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="memory_manager.h">
       <Filter>Исходные файлы\memory_manager</Filter>
     </ClInclude>
-    <ClInclude Include="my_string.h">
-      <Filter>Исходные файлы\my_string</Filter>
+    <ClInclude Include="string_manager.h">
+      <Filter>Исходные файлы\string_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="vigenere_cipher.h">
+      <Filter>Исходные файлы\vigenere_cipher</Filter>
+    </ClInclude>
+    <ClInclude Include="common.h">
+      <Filter>Исходные файлы\common</Filter>
+    </ClInclude>
+    <ClInclude Include="text_file_manager.h">
+      <Filter>Исходные файлы\text_file_manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

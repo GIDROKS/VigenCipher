@@ -1,52 +1,74 @@
+#include "text_file_manager.h"
+#include "vigenere_cipher.h"
+#include "string_manager.h"
 #include "memory_manager.h"
-#include "my_string.h"
+#include "common.h"
 
 #include <stdio.h>
 
 
-#define LETTERS_COUNT 26
-
-
-void encryptVigenere(char* text, char* key)
+char** inputTextData()
 {
-    int textLen = stringLength(text), keyLen = stringLength(key), i, j;
-
-    for (i = 0, j = 0; i < textLen; i++)
+    char** data;
+    char* filePath = chooseArrayFilePath();
+    if (filePath)
     {
-        char textChar = text[i];
-        char keyChar = key[j % keyLen];
-
-        textChar = toUpperCase(textChar);
-        keyChar = toUpperCase(keyChar);
-
-        if (textChar < 'A' || textChar > 'Z')
-        {
-            printf("%c", text[i]);
-            continue;
-        }
-
-        char encryptedChar = ((textChar - 'A' + (keyChar - 'A')) % LETTERS_COUNT) + 'A';
-
-        printf("%c", encryptedChar);
-
-        j++;
+        FILE* currentFile = openFile(filePath, "r");
+        data = readDataFromFile(currentFile);
+        fclose(currentFile);
+        printDataFromFile(filePath);
     }
-}
+    else
+    {
+        data = (char**)safeMemoryAllocate(2 * sizeof(char*));
 
+        printf("Enter the text:\n");
+        data[0] = enterTextFromConsole();
+
+        printf("Enter the key: ");
+        data[1] = enterWordFromConsole();
+    }
+
+    return data;
+}
 
 int main(int args, char* argv[])
 {
-    printf("Enter text: ");
-    char* text = readLine();
+    char** textAndKey;
+    printf("Print Sample Texts (1 - yes, 2 - no): ");
+    int printChoice = inputIntegerNumberInRange(1, 2);
+    if (printChoice == 1)
+        printSampleDataFromFiles();
 
-    printf("Enter key: ");
-    char* key = readLine();
+    while (1)
+    {
+        textAndKey = inputTextData();
 
-    printf("Encrypted text: ");
-    encryptVigenere(text, key);
+        if (!encryptVigenere(textAndKey[0], textAndKey[1]))
+        {
+            printf("Encryption failed.\n");
+            free(textAndKey[0]);
+            free(textAndKey[1]);
+            return 1;
+        }
 
-    free(text); 
-    free(key);
+        printf("Encrypted text:\n%s\n", textAndKey[0]);
 
+        if (!decryptVigenere(textAndKey[0], textAndKey[1]))
+        {
+            printf("Decryption failed.\n");
+            free(textAndKey[0]);
+            free(textAndKey[1]);
+            return 1;
+        }
+
+        printf("Decrypted text:\n%s\n", textAndKey[0]);
+
+        writeTextToResultFile(textAndKey[0]);
+        printf("\n\n");
+
+        free(textAndKey[0]);
+        free(textAndKey[1]);
+    }
     return 0;
 }

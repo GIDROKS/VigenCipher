@@ -3,19 +3,33 @@
 #include <stdio.h>
 
 
-void copyMemory(void* dest, const void* src, size_t n)
+#define MEMORY_REDUCTION_THRESHOLD 256
+
+
+void* safeMemoryAllocate(size_t size)
+{
+    void* ptr = malloc(size);
+    if (ptr == NULL)
+    {
+        fprintf(stderr, "Memory allocation error!\n");
+        exit(EXIT_FAILURE);
+    }
+    return ptr;
+}
+
+void copyMemory(void* dest, const void* src, size_t size)
 {
     char* destBytes = (char*)dest;
     const char* srcBytes = (const char*)src;
 
-    for (size_t i = 0; i < n; i++)
+    for (size_t i = 0; i < size; i++)
         destBytes[i] = srcBytes[i];
 }
 
-
-void* reallocateMemory(void* currentPtr, size_t oldSize, size_t newSize)
+static void* reallocateMemory(void* currentPtr, size_t oldSize, size_t newSize)
 {
-    if (newSize == 0) {
+    if (newSize == 0)
+    {
         free(currentPtr);
         return NULL;
     }
@@ -23,18 +37,42 @@ void* reallocateMemory(void* currentPtr, size_t oldSize, size_t newSize)
     if (!currentPtr)
         return malloc(newSize);
 
-    if (newSize <= oldSize)
+    if (newSize == oldSize)
         return currentPtr;
 
-
-    void* newPtr = malloc(newSize);
-    if (!newPtr)
+    if (newSize < oldSize && (oldSize - newSize) > MEMORY_REDUCTION_THRESHOLD)
+    {
+        void* newPtr = malloc(newSize);
+        if (newPtr)
+        {
+            copyMemory(newPtr, currentPtr, newSize);
+            free(currentPtr);
+            return newPtr;
+        }
         return NULL;
+    }
 
-    size_t sizeToCopy = oldSize < newSize ? oldSize : newSize;
-    copyMemory(newPtr, currentPtr, sizeToCopy);
+    if (newSize > oldSize)
+    {
+        void* newPtr = malloc(newSize);
+        if (!newPtr)
+            return NULL;
+        copyMemory(newPtr, currentPtr, oldSize);
+        free(currentPtr);
+        return newPtr;
+    }
 
-    free(currentPtr);
+    return currentPtr;
+}
 
+void* safeReallocateMemory(void* currentPtr, size_t oldSize, size_t newSize)
+{
+    void* newPtr = reallocateMemory(currentPtr, oldSize, newSize);
+    if (!newPtr && newSize != 0)
+    {
+        fprintf(stderr, "Error: Failed to reallocate memory!\n");
+        free(currentPtr);
+        exit(EXIT_FAILURE);
+    }
     return newPtr;
 }
