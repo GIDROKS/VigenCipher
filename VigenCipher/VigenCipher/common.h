@@ -3,6 +3,5 @@
 
 int inputIntegerNumberInRange(int minValue, int maxValue);
 int inputIntegerNumber();
-char* cutBackString(char* string);
 
 #endif
