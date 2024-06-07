@@ -4,4 +4,4 @@ The main principles of OOP include encapsulation, inheritance, and polymorphism.
 Encapsulation helps to hide the internal implementation of an object
 and provides only the necessary interfaces for interacting with it.
 
-Encapsulation
+encapsulation

@@ -41,7 +41,7 @@ void printDataFromFile(const char* filePath)
     char** fileContent = readDataFromFile(file);
     if (fileContent != NULL)
     {
-        printf("%sText:\n%s\n", DELIMITER, fileContent[0]);
+        printf("Text:\n%s\n", fileContent[0]);
         printf("Key: %s%s\n", fileContent[1], DELIMITER);
 
         free(fileContent[0]);
@@ -56,7 +56,7 @@ void printDataFromFile(const char* filePath)
 
 void printSampleDataFromFiles()
 {
-    printf("Sample Arrays:\n");
+    printf("Sample Arrays:\n%s", DELIMITER);
     for (int i = 0; i < SAMPLE_FILES_COUNT; i++)
         printDataFromFile(sampleFilePaths[i]);
     printf("\n");

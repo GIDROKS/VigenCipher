@@ -1,3 +1,5 @@
+polymorphism allows methods to work with objects of different types,
+enhancing the flexibility and extensibility of the code.
 there are two types of polymorphism: static and dynamic.
 abstraction helps to highlight common features of objects,
 hiding unnecessary details and providing a simpler interface for working with objects.
